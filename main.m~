@@ -1,0 +1,415 @@
+clc;
+clear all;
+% format long g;
+format short 
+ 
+sQF = 0.2;
+sQD = 0.4;
+
+kf  = -1.2;
+kd  = 1.2;
+
+lqeff = 0.05;
+
+R   = 3.8197;
+sDi = 1.5;
+epsi= 0.1964;
+sDr = 0.55;
+ldreff = 0.05;
+
+%MT =QpoleF(kf,sQF)*Drift(sDr)*edge(epsi,R)*Dipole(R,sDi)*edge(epsi,R)*Drift(sDr)*QpoleD(kd,sQD)*Drift(sDr)*edge(epsi,R)*Dipole(R,sDi)*edge(epsi,R)*Drift(sDr)*QpoleF(kf,sQF)
+MTT = zeros(5);
+Mnew = zeros(5);
+%making history
+%(event number,kQD,sQD,kQF,sQF,R,sDi,
+%his=zeros(10,1,1,1,1,1,1,1,1)
+his=zeros(125,1)
+his(1,1)  = 0; %First point and initial parameters
+
+his(2,1)  = 1; %QDF
+his(3,1)  = 1; %QDF
+his(4,1)  = 1; %QDF
+his(5,1)  = 1; %QDF
+
+
+his(6,1)  = 2; %Drift
+his(7,1)  = 2; %Drift
+his(8,1)  = 2; %Drift
+his(9,1)  = 2; %Drift
+his(10,1)  = 2; %Drift
+his(11,1)  = 2; %Drift
+his(12,1)  = 2; %Drift
+his(13,1)  = 2; %Drift
+his(14,1)  = 2; %Drift
+his(15,1)  = 2; %Drift
+his(16,1)  = 2; %Drift
+
+his(17,1)  = 3; %edge
+
+his(18,1)  = 4; %dipole
+his(19,1)  = 4; %dipole
+his(20,1)  = 4; %dipole
+his(21,1)  = 4; %dipole
+his(22,1)  = 4; %dipole
+his(23,1)  = 4; %dipole
+his(24,1)  = 4; %dipole
+his(25,1)  = 4; %dipole
+his(26,1)  = 4; %dipole
+his(27,1)  = 4; %dipole
+his(28,1)  = 4; %dipole
+his(29,1)  = 4; %dipole
+his(30,1)  = 4; %dipole
+his(31,1)  = 4; %dipole
+his(32,1)  = 4; %dipole
+his(33,1)  = 4; %dipole
+his(34,1)  = 4; %dipole
+his(35,1)  = 4; %dipole
+his(36,1)  = 4; %dipole
+his(37,1)  = 4; %dipole
+his(38,1)  = 4; %dipole
+his(39,1)  = 4; %dipole
+his(40,1)  = 4; %dipole
+his(41,1)  = 4; %dipole
+his(42,1)  = 4; %dipole
+his(43,1)  = 4; %dipole
+his(44,1)  = 4; %dipole
+his(45,1)  = 4; %dipole
+his(46,1)  = 4; %dipole
+his(47,1)  = 4; %dipole
+
+
+
+his(48,1)  = 3; %edge
+
+his(49,1)  = 2; %Drift
+his(50,1)  = 2; %Drift
+his(51,1)  = 2; %Drift
+his(52,1)  = 2; %Drift
+his(53,1)  = 2; %Drift
+his(54,1)  = 2; %Drift
+his(55,1)  = 2; %Drift
+his(56,1)  = 2; %Drift
+his(57,1)  = 2; %Drift
+his(58,1)  = 2; %Drift
+his(59,1)  = 2; %Drift
+
+his(60,1)  = 5; %QDD
+his(61,1)  = 5; %QDD
+his(62,1)  = 5; %QDD
+his(63,1)  = 5; %QDD
+his(64,1)  = 5; %QDD
+his(65,1)  = 5; %QDD
+his(66,1)  = 5; %QDD
+his(67,1)  = 5; %QDD
+
+his(68,1)  = 2; %Drift
+his(69,1)  = 2; %Drift
+his(70,1)  = 2; %Drift
+his(71,1)  = 2; %Drift
+his(72,1)  = 2; %Drift
+his(73,1)  = 2; %Drift
+his(74,1)  = 2; %Drift
+his(75,1)  = 2; %Drift
+his(76,1)  = 2; %Drift
+his(77,1)  = 2; %Drift
+his(78,1)  = 2; %Drift
+
+his(79,1) = 3; %edge
+
+his(80,1)  = 4; %dipole
+his(81,1)  = 4; %dipole
+his(82,1)  = 4; %dipole
+his(83,1)  = 4; %dipole
+his(84,1)  = 4; %dipole
+his(85,1)  = 4; %dipole
+his(86,1)  = 4; %dipole
+his(87,1)  = 4; %dipole
+his(88,1)  = 4; %dipole
+his(89,1)  = 4; %dipole
+his(90,1)  = 4; %dipole
+his(91,1)  = 4; %dipole
+his(92,1)  = 4; %dipole
+his(93,1)  = 4; %dipole
+his(94,1)  = 4; %dipole
+his(95,1)  = 4; %dipole
+his(96,1)  = 4; %dipole
+his(97,1)  = 4; %dipole
+his(98,1)  = 4; %dipole
+his(99,1)  = 4; %dipole
+his(100,1)  = 4; %dipole
+his(101,1)  = 4; %dipole
+his(102,1)  = 4; %dipole
+his(103,1)  = 4; %dipole
+his(104,1)  = 4; %dipole
+his(105,1)  = 4; %dipole
+his(106,1)  = 4; %dipole
+his(107,1)  = 4; %dipole
+his(108,1)  = 4; %dipole
+his(109,1)  = 4; %dipole
+
+his(110,1) = 3; %edge
+
+his(111,1)  = 2; %Drift
+his(112,1)  = 2; %Drift
+his(113,1)  = 2; %Drift
+his(114,1)  = 2; %Drift
+his(115,1)  = 2; %Drift
+his(116,1)  = 2; %Drift
+his(117,1)  = 2; %Drift
+his(118,1)  = 2; %Drift
+his(119,1)  = 2; %Drift
+his(120,1)  = 2; %Drift
+his(121,1)  = 2; %Drift
+
+his(122,1)  = 1; %QDF
+his(123,1)  = 1; %QDF
+his(124,1)  = 1; %QDF
+his(125,1)  = 1; %QDF
+
+
+%devoloping bet function
+for i= 1:125
+   if(i~=1)
+   if (his(i,1)==1)
+      Mnew=QpoleF(kf,lqeff); 
+   end
+   if (his(i,1)==2)
+      Mnew=Drift(ldreff); 
+   end   
+   if (his(i,1)==3)
+      Mnew=edge(epsi,R); 
+   end
+   if (his(i,1)==4)
+      Mnew=Dipole(R,lqeff); 
+      end
+   if (his(i,1)==5)
+      Mnew=QpoleD(kd,lqeff); 
+   end
+   if (i==2)
+   MTT = Mnew;
+   else
+   MTT =Mnew*MTT;
+   end      
+   end   
+end
+
+MTT;
+
+'end matrices'
+%initial value for x
+bet0 = sqrt(-(MTT(1,2)*MTT(2,2))/(MTT(2,1)*MTT(1,1)));
+alf0 = 0;
+gam0 = 1/bet0;
+
+
+
+
+%initial value for z
+betz0 = sqrt(-(MTT(3,4)*MTT(4,4))/(MTT(4,3)*MTT(3,3)));
+alfz0 = 0;
+gamz0 = 1/betz0;
+
+
+
+MB = zeros(5);
+be = zeros(125,1);
+al = zeros(125,1);
+ga = zeros(125,1);
+l = zeros(125,1);
+be(1,1) =bet0 ;al(1,1) =alf0 ;ga(1,1) =gam0 ;
+for i= 1:125
+   if (his(i,1)==0)
+      l(i,1)=0;
+   end
+    if(i~=1)
+    if (his(i,1)==1)
+      Mnew=QpoleF(kf,lqeff); 
+      l(i,1)=l(i-1,1)+lqeff;
+   end
+   if (his(i,1)==2)
+      Mnew=Drift(ldreff); 
+      l(i,1)=l(i-1,1)+ldreff;
+   end   
+   if (his(i,1)==3)
+      Mnew=edge(epsi,R); 
+      l(i,1)=l(i-1,1)+0;
+   end
+   if (his(i,1)==4)
+      Mnew=Dipole(R,lqeff);
+      l(i,1)=l(i-1,1)+lqeff;
+      end
+   if (his(i,1)==5)
+      Mnew=QpoleD(kd,lqeff); 
+      l(i,1)=l(i-1,1)+lqeff;
+   end
+
+   MB =Mnew;
+   be(i) = ((MB(1,1)*MB(1,1))*be(i-1,1))-(2*MB(1,1)*MB(1,2)*al(i-1,1))+(MB(1,2)*MB(1,2)*ga(i-1,1));
+   al(i) = (-MB(1,1)*MB(2,1)*be(i-1,1))+(((MB(1,1)*MB(2,2))+(MB(1,2)*MB(2,1)))*al(i-1,1))-(MB(2,2)*MB(1,2)*ga(i-1,1));
+   ga(i) = ((MB(2,1)*MB(2,1))*be(i-1,1))-(2*MB(2,2)*MB(2,1)*al(i-1,1))+(MB(2,2)*MB(2,2)*ga(i-1,1));
+    
+  end
+end
+MB;
+%plot(l(:,1),be(:,1))
+%plot(l,be)
+%hold on;
+%plot(l,al)
+%hold on;
+%plot(l,ga)
+%axis([0 6 0 12])
+
+MB = zeros(5);
+bez = zeros(125,1);
+alz = zeros(125,1);
+gaz = zeros(125,1);
+lz = zeros(125,1);
+bez(1,1) =betz0 ;alz(1,1) =alfz0 ;gaz(1,1) =gamz0 ;
+for i= 1:125
+   if (his(i,1)==0)
+      lz(i,1)=0;
+   end
+    if(i~=1)
+    if (his(i,1)==1)
+      Mnew=QpoleF(kf,lqeff); 
+      lz(i,1)=lz(i-1,1)+lqeff;
+   end
+   if (his(i,1)==2)
+      Mnew=Drift(ldreff); 
+      lz(i,1)=lz(i-1,1)+ldreff;
+   end   
+   if (his(i,1)==3)
+      Mnew=edge(epsi,R); 
+      lz(i,1)=lz(i-1,1)+0;
+   end
+   if (his(i,1)==4)
+      Mnew=Dipole(R,lqeff);
+      lz(i,1)=lz(i-1,1)+lqeff;
+      end
+   if (his(i,1)==5)
+      Mnew=QpoleD(kd,lqeff); 
+      lz(i,1)=lz(i-1,1)+lqeff;
+   end
+
+   MB =Mnew;
+   bez(i) =((MB(3,3)*MB(3,3))*bez(i-1,1))-(2*MB(3,3)*MB(3,4)*alz(i-1,1))+(MB(3,4)*MB(3,4)*gaz(i-1,1));
+   alz(i) =(-MB(3,3)*MB(4,3)*bez(i-1,1))+(((MB(3,3)*MB(4,4))+(MB(3,4)*MB(4,3)))*alz(i-1,1))-(MB(4,4)*MB(3,4)*gaz(i-1,1));
+   gaz(i) =((MB(4,3)*MB(4,3))*bez(i-1,1))-(2*MB(4,4)*MB(4,3)*alz(i-1,1))+(MB(4,4)*MB(4,4)*gaz(i-1,1));
+      
+  end
+end
+
+figure;
+grid on;
+hold on;
+plot(l,be,'LineWidth',2)
+hold on;
+plot(lz, bez,'r','LineWidth',2)
+%axis([0 6 0 12])
+
+figure;
+grid on
+hold on;
+plot(l,al,'LineWidth',2)
+hold on;
+plot(lz, alz,'r','LineWidth',2)
+%axis([0 6 -3 3])
+
+figure
+grid on
+hold on;
+plot(l,ga,'LineWidth',2)
+hold on;
+plot(lz, gaz,'r','LineWidth',2)
+axis([0 6 0 1])
+
+for j=1:125
+   beb(j)=1/be(j); bezb(j)=1./bez(j);
+end
+Qx = trapz(lz,beb)/(2*pi);
+Qz = trapz(lz,bezb)/(2*pi);
+
+Qx = Qx *8
+Qz = Qz *8
+
+for j=1:125
+
+  
+   epsx(j) = trapz(lz(1:j),beb(1:)/(2*pi); 
+end
+
+  %plot(Qx,Qz,'ro','LineWidth',3)
+  bep= zeros(125,1);
+  alp= zeros(125,1);
+  gap= zeros(125,1);
+  
+  
+  bezp= zeros(125,1);
+  alzp= zeros(125,1);
+  gazp= zeros(125,1);
+  
+  
+  for i= 1:125
+   if (his(i,1)==0)
+      l(i,1)=0;
+   end
+    if(i~=1)
+    KS = 0;
+    if (his(i,1)==1)
+      KS = -kf;
+    end
+    
+    %QD
+   if (his(i,1)==5)
+      KS = -kd; 
+   end
+   
+   %Dipole
+   if (his(i,1)==4)
+      KS = 1/R; 
+   end
+   
+   
+   
+   bep(i) = -2*al(i);
+   alp(i) = be(i)*KS -ga(i);
+   gap(i) = 2*al(i)*KS;
+    
+   bezp(i) = -2*alz(i);
+   alzp(i) = bez(i)*KS -gaz(i);
+   gazp(i) = 2*alz(i)*KS;
+   
+  end
+  end
+
+  
+figure;
+grid on
+hold on;
+plot(l,alp,'LineWidth',2)
+hold on;
+plot(lz, alzp,'r','LineWidth',2)
+%axis([0 6 -3 3])
+
+figure;
+grid on
+hold on;
+plot(l,bep,'LineWidth',2)
+hold on;
+plot(lz, bezp,'r','LineWidth',2)
+%axis([0 6 -3 3])
+
+figure;
+grid on
+hold on;
+plot(l,ga,'LineWidth',2)
+hold on;
+plot(lz, gazp,'r','LineWidth',2)
+%axis([0 6 -3 3])
+figure
+    
+
+
+  
+  hold on 
+  plot(Qx,Qz,'o','LineWidth',0.5)
